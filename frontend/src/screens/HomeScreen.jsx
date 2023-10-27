@@ -4,7 +4,7 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 
 // --- COMPONENT IMPORTS
-import Product from './Product'
+import Product from '../components/Product'
 
 // --- DATA IMPORTS ---
 import products from '../products'

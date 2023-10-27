@@ -15,7 +15,7 @@ import {
   RouterProvider
 } from 'react-router-dom'
 
-// --- COMPONENT IMPORTS
+// --- SCREEN IMPORTS
 import HomeScreen from './screens/HomeScreen';
 
 const router = createBrowserRouter(

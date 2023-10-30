@@ -1,18 +1,33 @@
 import React from 'react'
 
 // --- DATA IMPORTS --- 
-import products from '../products'
 import Rating from '../components/Rating'
 
 // --- PACKAGE IMPORTS ---
 import { useParams, Link } from 'react-router-dom'
 import { Row, Col, Image, ListGroup, Button, Card } from 'react-bootstrap'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const ProductScreen = () => {
 
-    const { id: productId } = useParams
-    const product = products.find((p) => p._id === productId)
-    console.log(product)
+    const [ product, setProduct ] = useState({});
+
+    const { id: productId } = useParams();
+    
+    useEffect(() => {
+        const fetchProduct = async () => {
+            const { data } = await axios.get(`/api/products/${productId}`);
+            setProduct(data);
+        }
+
+        fetchProduct();
+    }, [productId]);
+
+    const formattedPrice = product.price ? product.price.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'PHP',
+    }) : 'Price not available';
 
   return (
     <>
@@ -29,7 +44,7 @@ const ProductScreen = () => {
                     <ListGroup.Item>
                         <Rating value={ product.rating } text={ `${product.numReviews} reviews` }/>
                     </ListGroup.Item>
-                    <ListGroup.Item>Price: ₱ { product.price.toLocaleString() }</ListGroup.Item>
+                    <ListGroup.Item>Price: ₱ { formattedPrice }</ListGroup.Item>
                     <ListGroup.Item>{ product.description }</ListGroup.Item>
                 </ListGroup>
             </Col>
@@ -40,7 +55,7 @@ const ProductScreen = () => {
                             <Row>
                                 <Col>Price: </Col>
                                 <Col>
-                                    <strong>₱ { product.price }</strong>
+                                    <strong>₱ { formattedPrice }</strong>
                                 </Col>
                             </Row>
                         </ListGroup.Item>

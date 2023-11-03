@@ -1,6 +1,5 @@
 const products = [
   {
-    _id: '1',
     name: 'DJI Mavic 3 Pro (DJI RC)',
     image: '/images/DJIMavic3Pro.jpg',
     description:
@@ -13,7 +12,6 @@ const products = [
     numReviews: 12,
   },
   {
-    _id: '2',
     name: 'JOUAV Air 3 (RC-N2)',
     image: '/images/DJIAir3.jpg',
     description:
@@ -26,7 +24,6 @@ const products = [
     numReviews: 8,
   },
   {
-    _id: '3',
     name: 'DJI Mini 4 Pro (DJI RC-N2)',
     image: '/images/DJIMini4Pro.jpg',
     description:
@@ -39,7 +36,6 @@ const products = [
     numReviews: 12,
   },
   {
-    _id: '4',
     name: 'JOUAV Mini 3 (RC-N1)',
     image: '/images/DJIMini3.jpg',
     description:
@@ -52,7 +48,6 @@ const products = [
     numReviews: 12,
   },
   {
-    _id: '5',
     name: 'DJI Avata Pro-View (New)',
     image: '/images/DJIAvata.jpg',
     description:
@@ -65,7 +60,6 @@ const products = [
     numReviews: 10,
   },
   {
-    _id: '6',
     name: 'Zenmuse Inspire 3',
     image: '/images/DJIInspire3.jpg',
     description:

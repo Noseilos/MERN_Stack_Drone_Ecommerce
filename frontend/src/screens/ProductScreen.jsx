@@ -3,6 +3,10 @@ import React from 'react'
 // --- DATA IMPORTS --- 
 import Rating from '../components/Rating'
 
+// --- COMPONENT IMPORT ---
+import Loader from '../components/Loader'
+import Message from '../components/Message'
+
 // --- PACKAGE IMPORTS ---
 import { useParams, Link } from 'react-router-dom'
 import { Row, Col, Image, ListGroup, Button, Card } from 'react-bootstrap'
@@ -20,9 +24,11 @@ const ProductScreen = () => {
     <>
         <Link className='btn btn-light my-3' to='/'>Go Back</Link>
         { isLoading ? (
-            <h2>Loading...</h2>
+            <Loader />
         ) : error ? (
-            <div>{ error?.data?.message || error.error }</div>
+            <Message variant='danger'>
+              { error?.data?.message || error.error }
+            </Message>
         ) : (
             <>
                 <Row>

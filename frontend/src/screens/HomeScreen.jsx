@@ -5,6 +5,8 @@ import { Row, Col } from 'react-bootstrap'
 
 // --- COMPONENT IMPORTS
 import Product from '../components/Product'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
 
 // --- PACKAGE IMPORTS ---
 
@@ -18,11 +20,11 @@ const HomeScreen = () => {
   return (
     <>
       { isLoading ? (
-        <h2>Loading...</h2>
+        <Loader />
       ) : error ? (
-        <div>
+        <Message variant='danger'>
           { error?.data?.message || error.error }
-        </div>
+        </Message>
       ) : (
 
         <>

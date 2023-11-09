@@ -69,13 +69,48 @@ const OrderScreen = () => {
                                         <Col md={1}>
                                             <Image src={item.image} alt={item.name} fluid rounded/>
                                         </Col>
+                                        <Col >
+                                            <Link to={`product/${item._id}`}>{item.name}</Link>
+                                        </Col>
+                                        <Col >
+                                            { item.qty } x ₱{parseFloat(item.price).toLocaleString()} = ₱{(item.qty * item.price).toLocaleString()}
+                                        </Col>
                                     </Row>
                                 </ListGroup.Item>
                             )) }
                     </ListGroup.Item>
                 </ListGroup>
             </Col>
-            <Col md={4}>Column</Col>
+            <Col md={4}>
+                <Card>
+                    <ListGroup variant='flush'>
+                        <ListGroup.Item>
+                            <h2>Order Summary</h2>
+                        </ListGroup.Item>
+
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Items</Col>
+                                <Col>₱{parseFloat(order.itemsPrice).toLocaleString()}</Col>
+                            </Row>
+                            <Row>
+                                <Col>Shipping</Col>
+                                <Col>₱{parseFloat(order.shippingPrice).toLocaleString()}</Col>
+                            </Row>
+                            <Row>
+                                <Col>Tax</Col>
+                                <Col>₱{parseFloat(order.taxPrice).toLocaleString()}</Col>
+                            </Row>
+                            <Row>
+                                <Col>Total</Col>
+                                <Col>₱{parseFloat(order.totalPrice).toLocaleString()}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                        {/* PAY ORDER PLACEHOLDER */}
+                        {/* MARK AS DELIVERED PLACEHOLDER */}
+                    </ListGroup>
+                </Card>
+            </Col>
         </Row>
     </>
   )

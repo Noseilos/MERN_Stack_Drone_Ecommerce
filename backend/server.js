@@ -32,7 +32,7 @@ const __dirname = path.resolve(); // Set dir name to current directory
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/upload', uploadRoutes)
+app.use('/api/uploads', uploadRoutes)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 app.get('/api/config/paypal', (req, res) => res.send({

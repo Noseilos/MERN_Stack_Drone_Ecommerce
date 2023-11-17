@@ -7,6 +7,7 @@ import { Row, Col } from 'react-bootstrap'
 import Product from '../components/Product'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import Paginate from '../components/Paginate'
 
 // --- PACKAGE IMPORTS ---
 import { useParams } from 'react-router-dom'
@@ -38,7 +39,11 @@ const HomeScreen = () => {
                       <Product product={ product } />
                   </Col>
               )) }
-          </Row>                    
+          </Row>
+          <Paginate 
+            pages={data.pages}                    
+            page={data.page}
+          />
         </>
       ) }
     </>

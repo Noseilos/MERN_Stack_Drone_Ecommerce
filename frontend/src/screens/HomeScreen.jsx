@@ -10,7 +10,7 @@ import Message from '../components/Message'
 import Paginate from '../components/Paginate'
 
 // --- PACKAGE IMPORTS ---
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 // --- SLICE IMPORTS --- 
 import { useGetProductsQuery } from '../slices/productsApiSlice'
@@ -23,6 +23,7 @@ const HomeScreen = () => {
 
   return (
     <>
+    { keyword && <Link to='/' className='btn btn-light mb-4'>Go Back</Link> }
       { isLoading ? (
         <Loader />
       ) : error ? (

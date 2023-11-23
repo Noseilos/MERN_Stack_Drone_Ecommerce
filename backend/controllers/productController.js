@@ -174,5 +174,13 @@ const createCategory = asyncHandler(async (req, res) => {
     res.send(createdCategory);
 });
 
+// @desc    Fetch ALL categories
+// @route   GET /api/categories
+// @access  Public
+const getCategories = asyncHandler(async (req, res) => {
+    const categories = await Category.find({});
+    res.status(200).json(categories);
+});
 
-export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory };
+
+export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory, getCategories };

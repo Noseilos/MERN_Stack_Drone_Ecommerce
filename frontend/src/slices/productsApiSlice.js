@@ -1,4 +1,4 @@
-import { PRODUCTS_URL, UPLOAD_URL } from '../constants';
+import { PRODUCTS_URL, UPLOAD_URL, CATEGORIES_URL } from '../constants';
 import { apiSlice } from './apiSlice';
 
 export const productsApiSlice = apiSlice.injectEndpoints({
@@ -62,7 +62,25 @@ export const productsApiSlice = apiSlice.injectEndpoints({
                 url: `${PRODUCTS_URL}/top`
             }),
             keepUnusedDataFor: 5,
-        })
+        }),
+
+        // -------------------- CATEGORY SLICES --------------------
+
+        createCategories: builder.mutation({
+            query: (data) => ({
+                url: CATEGORIES_URL,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['Category']
+        }),
+        uploadCategoryImage: builder.mutation({
+            query: (data) => ({
+                url: UPLOAD_URL,
+                method: 'POST',
+                body: data,
+            })
+        }),
     }),
 });
 
@@ -74,5 +92,7 @@ export const {
     useUploadProductImageMutation,
     useDeleteProductMutation,
     useCreateReviewMutation,
-    useGetTopProductsQuery
+    useGetTopProductsQuery,
+    useCreateCategoriesMutation,
+    useUploadCategoryImageMutation,
 } = productsApiSlice;

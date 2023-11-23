@@ -1,4 +1,5 @@
 import asyncHandler from '../middleware/asyncHandler.js'
+import Category from '../models/categoryModel.js';
 import Product from '../models/productModel.js';
 
 // @desc    Fetch ALL products
@@ -151,4 +152,27 @@ const getTopProducts = asyncHandler(async (req, res) => {
     res.status(200).json(products);
 });
 
-export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts };
+// ----------------- CATEGORY FUNCTIONS -----------------
+
+// @desc    Create a category
+// @route   POST /api/categories/
+// @access  Private/Admin
+const createCategory = asyncHandler(async (req, res) => {
+    const {
+        name,
+        image,
+    } = req.body
+
+    const category = new Category({
+        user: req.user._id,
+        name,
+        image,
+    });
+
+    const createdCategory = await category.save();
+    res.status(201).json(createdCategory);
+    res.send(createdCategory);
+});
+
+
+export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory };

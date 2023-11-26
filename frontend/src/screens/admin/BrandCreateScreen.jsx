@@ -11,7 +11,7 @@ import FormContainer from "../../components/FormContainer";
 const BrandCreateScreen = () => {
   
     const [name, setName] = useState('');
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState([]);
     
     const navigate = useNavigate();
 
@@ -25,16 +25,20 @@ const BrandCreateScreen = () => {
 
     const uploadFileHandler = async (e) => {
         const formData = new FormData();
-        formData.append('image', e.target.files[0]);
-
-        try {
-            const res = await uploadBrandImage(formData).unwrap();
-            toast.success(res.message);
-            setImage(res.image);
-        } catch (err) {
-            toast.error(err?.data?.message || err.error);
+    
+        for (let i = 0; i < e.target.files.length; i++) {
+          formData.append('image', e.target.files[i]);
         }
-    }
+    
+        try {
+          const res = await uploadBrandImage(formData).unwrap();
+          toast.success(res.message);
+          setImage(res.image); 
+        } catch (err) {
+          toast.error(err?.data?.message || err.error);
+          console.log(err?.data?.message || err.error);
+        }
+      };
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -75,14 +79,11 @@ const BrandCreateScreen = () => {
                     <FormGroup controlId="image" className="my-2">
                         <Form.Label>Image</Form.Label>
                         <Form.Control
-                            type="hidden"
-                            value={ image }
-                            onChange={ (e) => setImage(e.target.value) }>
-                        </Form.Control>
-                        <Form.Control
                             type="file"
-                            label="Choose file"
-                            onChange={ uploadFileHandler }>
+                            label="Choose files"
+                            multiple
+                            onChange={uploadFileHandler}
+                        >
                         </Form.Control>
                     </FormGroup>
                     { loadingUpload && <Loader /> }

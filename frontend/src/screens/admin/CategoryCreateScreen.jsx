@@ -26,7 +26,6 @@ const CategoryCreateScreen = () => {
     const uploadFileHandler = async (e) => {
         const formData = new FormData();
     
-        // Append each file to the FormData
         for (let i = 0; i < e.target.files.length; i++) {
           formData.append('image', e.target.files[i]);
         }
@@ -34,7 +33,7 @@ const CategoryCreateScreen = () => {
         try {
           const res = await uploadCategoryImage(formData).unwrap();
           toast.success(res.message);
-          setImage(res.image); // Assuming the server responds with an array of image paths
+          setImage(res.image); 
         } catch (err) {
           toast.error(err?.data?.message || err.error);
           console.log(err?.data?.message || err.error);

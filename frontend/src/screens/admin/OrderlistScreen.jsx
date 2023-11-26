@@ -4,11 +4,59 @@ import { FaTimes } from 'react-icons/fa'
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 import { useGetOrdersQuery } from '../../slices/ordersSlice'
+import { Line, Bar } from 'react-chartjs-2'
+import { Chart as ChartJS } from "chart.js/auto";
 
 const OrderlistScreen = () => {
 
   const { data: orders, isLoading, error } = useGetOrdersQuery();
   console.log(orders)
+
+  const dates = orders ? orders.map(order => order.createdAt.substring(0, 10)) : [];
+  const totalPrices = orders ? orders.map(order => order.totalPrice) : [];
+
+  const data = {
+    labels: dates,
+    datasets: [
+      {
+        label: 'Total Price',
+        data: totalPrices,
+        fill: false,
+        backgroundColor: 'rgb(75, 192, 192)',
+        borderColor: 'rgba(75, 192, 192, 0.2)',
+      },
+    ],
+  };
+
+  const products = orders ? orders.flatMap(order => order.orderItems.map(item => item.name)) : [];
+  const productCounts = products.reduce((acc, product) => {
+    acc[product] = (acc[product] || 0) + 1;
+    return acc;
+  }, {});
+
+  const barData = {
+    labels: Object.keys(productCounts),
+    datasets: [
+      {
+        label: 'Sales',
+        data: Object.values(productCounts),
+        backgroundColor: 'rgb(75, 192, 192)',
+        borderColor: 'rgba(75, 192, 192, 0.2)',
+      },
+    ],
+  };
+
+const options = {
+  scales: {
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+        },
+      },
+    ],
+  },
+};
 
   return (
     <>
@@ -16,6 +64,7 @@ const OrderlistScreen = () => {
       { isLoading ? <Loader /> : error ? (
         <Message variant='danger'>{error?.data?.message || error.error}</Message>
       ) : (
+        <>
         <Table striped hover responsive className='table-sm'>
           <thead>
             <tr>
@@ -60,6 +109,9 @@ const OrderlistScreen = () => {
             )) }
           </tbody>
         </Table>
+        <Line data={data} />
+        <Bar data={barData} />
+        </>
       ) }
     </>
   )

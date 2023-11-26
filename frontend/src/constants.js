@@ -5,5 +5,4 @@ export const USERS_URL = '/api/users';
 export const ORDERS_URL = '/api/orders';
 export const PAYPAL_URL = '/api/config/paypal';
 export const UPLOAD_URL = '/api/uploads';
-export const UPLOAD_CATEGORIES_URL = '/api/uploads/categories';
 export const CATEGORIES_URL = '/api/categories'

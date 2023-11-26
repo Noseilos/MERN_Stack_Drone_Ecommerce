@@ -3,12 +3,14 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useUploadProductImageMutation, useCreateProductMutation } from '../../slices/productsApiSlice';
+import { useUploadProductImageMutation, useCreateProductMutation, useGetCategoriesQuery } from '../../slices/productsApiSlice';
 import { toast } from 'react-toastify';
 import { Form,Button, FormGroup, FormControl } from 'react-bootstrap';
 import FormContainer from "../../components/FormContainer";
 
 const ProductCreateScreen = () => {
+
+    const { data: categories, isLoading: loadingCategories } = useGetCategoriesQuery();
 
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
@@ -17,7 +19,6 @@ const ProductCreateScreen = () => {
     const [category, setCategory] = useState('');
     const [countInStock, setCountInStock] = useState(0);
     const [description, setDescription] = useState('');
-    
 
     const navigate = useNavigate();
 
@@ -67,7 +68,7 @@ const ProductCreateScreen = () => {
           toast.error(result.error);
         } else {
           toast.success('Product Created');
-          navigate('/admin/productlist');
+          navigate('/admin/products');
         }
       };
 
@@ -102,8 +103,7 @@ const ProductCreateScreen = () => {
                     <FormGroup controlId="image" className="my-2">
                         <Form.Label>Image</Form.Label>
                         <Form.Control
-                            type="text"
-                            placeholder="Enter image url"
+                            type="hidden"
                             value={ image }
                             onChange={ (e) => setImage(e.target.value) }>
                         </Form.Control>
@@ -125,24 +125,24 @@ const ProductCreateScreen = () => {
                         ></Form.Control>
                     </FormGroup>
                     
-                    <FormGroup controlId="countInStock" className="my-2">
-                        <Form.Label>Count In Stock</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="Enter Count In Stock"
-                            value={countInStock}
-                            onChange={(e) => setCountInStock(e.target.value)}
-                        ></Form.Control>
-                    </FormGroup>
-                    
                     <FormGroup controlId="category" className="my-2">
                         <Form.Label>Category</Form.Label>
                         <Form.Control
-                            type="text"
-                            placeholder="Enter Category"
+                            as="select"
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
-                        ></Form.Control>
+                          >
+                            <option value="">Select Category ...</option>
+                            {loadingCategories ? (
+                                <option>Loading categories...</option>
+                            ) : (
+                                categories.map((categoryItem) => (
+                                    <option key={categoryItem._id} value={categoryItem.name}>
+                                    {categoryItem.name}
+                                    </option>
+                                ))
+                            )}
+                          </Form.Control>
                     </FormGroup>
                     
                     <FormGroup controlId="description" className="my-2">
@@ -152,6 +152,16 @@ const ProductCreateScreen = () => {
                             placeholder="Enter Description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
+                        ></Form.Control>
+                    </FormGroup>
+                    
+                    <FormGroup controlId="countInStock" className="my-2">
+                        <Form.Label>Count In Stock</Form.Label>
+                        <Form.Control
+                            type="number"
+                            placeholder="Enter Count In Stock"
+                            value={countInStock}
+                            onChange={(e) => setCountInStock(e.target.value)}
                         ></Form.Control>
                     </FormGroup>
 

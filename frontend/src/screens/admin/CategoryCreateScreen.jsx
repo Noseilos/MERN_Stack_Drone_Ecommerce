@@ -75,8 +75,7 @@ const CategoryCreateScreen = () => {
                     <FormGroup controlId="image" className="my-2">
                         <Form.Label>Image</Form.Label>
                         <Form.Control
-                            type="text"
-                            placeholder="Enter image url"
+                            type="hidden"
                             value={ image }
                             onChange={ (e) => setImage(e.target.value) }>
                         </Form.Control>

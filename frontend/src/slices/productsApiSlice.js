@@ -76,10 +76,17 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         }),
         uploadCategoryImage: builder.mutation({
             query: (data) => ({
-                url: UPLOAD_URL,
+                url: `${UPLOAD_URL}/category`,
                 method: 'POST',
                 body: data,
             })
+        }),
+        getCategories: builder.query({
+            query: () => ({
+                url: CATEGORIES_URL,
+            }),
+            providesTags: ['Category'],
+            keepUnusedDataFor: 5,
         }),
     }),
 });
@@ -95,4 +102,5 @@ export const {
     useGetTopProductsQuery,
     useCreateCategoriesMutation,
     useUploadCategoryImageMutation,
+    useGetCategoriesQuery,
 } = productsApiSlice;

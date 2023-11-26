@@ -10,6 +10,7 @@ import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import categoryUploadRoutes from './routes/categoryUploadRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 
 const port = process.env.PORT || 5000;
@@ -31,7 +32,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/uploads', uploadRoutes)
+app.use('/api/uploads', uploadRoutes);
+app.use('/api/uploads/category', categoryUploadRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 if (process.env.NODE_ENV === 'production'  ) {

@@ -21,6 +21,7 @@ import {
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { Carousel, Image as BootstrapImage } from "react-bootstrap";
 
 // --- SLICE IMPORTS ---
 import { useGetProductDetailsQuery, useCreateReviewMutation } from "../slices/productsApiSlice";
@@ -69,6 +70,12 @@ const ProductScreen = () => {
     navigate('/cart');
   };
 
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleSelect = (selectedIndex, e) => {
+    setActiveIndex(selectedIndex);
+  };
+
   return (
     <>
       <Link className="btn btn-light my-3" to="/">
@@ -85,7 +92,17 @@ const ProductScreen = () => {
         <Meta title={product.name}/>
           <Row>
             <Col md={5}>
-              <Image src={product.image} alt={product.name} fluid />
+              {product.image && product.image.length > 1 ? (
+                <Carousel activeIndex={activeIndex} onSelect={handleSelect}>
+                  {product.image.map((image, index) => (
+                    <Carousel.Item key={index}>
+                      <BootstrapImage src={image} alt={`Image ${index + 1}`} fluid />
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              ) : (
+                <BootstrapImage src={product.image} alt={product.name} fluid />
+              )}
             </Col>
             <Col md={4}>
               <ListGroup variant="flush">

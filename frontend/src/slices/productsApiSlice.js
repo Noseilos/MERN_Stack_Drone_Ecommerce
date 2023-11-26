@@ -1,4 +1,4 @@
-import { PRODUCTS_URL, UPLOAD_URL, CATEGORIES_URL } from '../constants';
+import { PRODUCTS_URL, UPLOAD_URL, CATEGORIES_URL, BRANDS_URL } from '../constants';
 import { apiSlice } from './apiSlice';
 
 export const productsApiSlice = apiSlice.injectEndpoints({
@@ -88,6 +88,31 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             providesTags: ['Category'],
             keepUnusedDataFor: 5,
         }),
+
+        // -------------------- BRAND SLICES --------------------
+
+        createBrand: builder.mutation({
+            query: (data) => ({
+                url: BRANDS_URL,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['Brand']
+        }),
+        uploadBrandImage: builder.mutation({
+            query: (data) => ({
+                url: `${UPLOAD_URL}/brand`,
+                method: 'POST',
+                body: data,
+            })
+        }),
+        // getCategories: builder.query({
+        //     query: () => ({
+        //         url: CATEGORIES_URL,
+        //     }),
+        //     providesTags: ['Category'],
+        //     keepUnusedDataFor: 5,
+        // }),
     }),
 });
 
@@ -103,4 +128,6 @@ export const {
     useCreateCategoriesMutation,
     useUploadCategoryImageMutation,
     useGetCategoriesQuery,
+    useCreateBrandMutation,
+    useUploadBrandImageMutation
 } = productsApiSlice;

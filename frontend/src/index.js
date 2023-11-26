@@ -36,6 +36,7 @@ import UserListScreen from './screens/admin/UserListScreen';
 import UserEditScreen from './screens/admin/UserEditScreen';
 import ProductCreateScreen from './screens/admin/ProductCreateScreen';
 import CategoryCreateScreen from './screens/admin/CategoryCreateScreen';
+import BrandCreateScreen from './screens/admin/BrandCreateScreen';
 
 // --- COMPONENT IMPORTS
 import PrivateRoute from './components/PrivateRoute';
@@ -65,6 +66,7 @@ const router = createBrowserRouter(
         <Route path='/admin/orders' element={ <OrderlistScreen /> }/>
         <Route path='/admin/products' element={ <ProductListScreen /> }/>
         <Route path='/admin/categories' element={ <CategoryCreateScreen /> }/>
+        <Route path='/admin/brands' element={ <BrandCreateScreen /> }/>
         <Route path='/admin/product/create' element={ <ProductCreateScreen /> }/>
         <Route path='/admin/orders' element={ <OrderlistScreen /> }/>
         <Route path='/admin/products/:pageNumber' element={ <ProductListScreen /> }/>

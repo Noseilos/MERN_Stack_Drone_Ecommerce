@@ -6,3 +6,4 @@ export const ORDERS_URL = '/api/orders';
 export const PAYPAL_URL = '/api/config/paypal';
 export const UPLOAD_URL = '/api/uploads';
 export const CATEGORIES_URL = '/api/categories'
+export const BRANDS_URL = '/api/brands'

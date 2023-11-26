@@ -1,6 +1,7 @@
 import asyncHandler from '../middleware/asyncHandler.js'
 import Category from '../models/categoryModel.js';
 import Product from '../models/productModel.js';
+import Brand from '../models/brandModel.js';
 
 // @desc    Fetch ALL products
 // @route   GET /api/products
@@ -182,5 +183,27 @@ const getCategories = asyncHandler(async (req, res) => {
     res.status(200).json(categories);
 });
 
+// ----------------- BRAND FUNCTIONS -----------------
 
-export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory, getCategories };
+// @desc    Create a brand
+// @route   POST /api/brands
+// @access  Private/Admin
+const createBrand = asyncHandler(async (req, res) => {
+    const {
+        name,
+        image,
+    } = req.body
+
+    const brand = new Brand({
+        user: req.user._id,
+        name,
+        image,
+    });
+
+    const createdBrand = await brand.save();
+    res.status(201).json(createdBrand);
+    res.send(createdBrand);
+});
+
+
+export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory, getCategories, createBrand };

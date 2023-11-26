@@ -132,7 +132,7 @@ const ProductCreateScreen = () => {
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                           >
-                            <option value="">Select Category ...</option>
+                            <option value="">Select Category...</option>
                             {loadingCategories ? (
                                 <option>Loading categories...</option>
                             ) : (

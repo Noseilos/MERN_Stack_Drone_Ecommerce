@@ -11,7 +11,9 @@ import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import categoryUploadRoutes from './routes/categoryUploadRoutes.js';
+import brandUploadRoutes from './routes/brandUploadRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import brandRoutes from './routes/brandRoutes.js';
 
 const port = process.env.PORT || 5000;
 
@@ -30,10 +32,12 @@ const __dirname = path.resolve(); // Set dir name to current directory
 
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/brands', brandRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/uploads/category', categoryUploadRoutes);
+app.use('/api/uploads/brand', brandUploadRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 if (process.env.NODE_ENV === 'production'  ) {

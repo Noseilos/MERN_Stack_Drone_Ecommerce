@@ -3,13 +3,14 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useUploadProductImageMutation, useCreateProductMutation, useGetCategoriesQuery } from '../../slices/productsApiSlice';
+import { useUploadProductImageMutation, useCreateProductMutation, useGetCategoriesQuery, useGetBrandsQuery } from '../../slices/productsApiSlice';
 import { toast } from 'react-toastify';
 import { Form,Button, FormGroup, FormControl } from 'react-bootstrap';
 import FormContainer from "../../components/FormContainer";
 
 const ProductCreateScreen = () => {
 
+    const { data: brands, isLoading: loadingBrands } = useGetBrandsQuery();
     const { data: categories, isLoading: loadingCategories } = useGetCategoriesQuery();
 
     const [name, setName] = useState('');
@@ -118,11 +119,21 @@ const ProductCreateScreen = () => {
                     <FormGroup controlId="brand" className="my-2">
                         <Form.Label>Brand</Form.Label>
                         <Form.Control
-                            type="text"
-                            placeholder="Enter brand"
+                            as="select"
                             value={brand}
                             onChange={(e) => setBrand(e.target.value)}
-                        ></Form.Control>
+                          >
+                            <option value="">Select Brand...</option>
+                            {loadingCategories ? (
+                                <option>Loading brands...</option>
+                            ) : (
+                                brands.map((brandItem) => (
+                                    <option key={brandItem._id} value={brandItem.name}>
+                                    {brandItem.name}
+                                    </option>
+                                ))
+                            )}
+                          </Form.Control>
                     </FormGroup>
                     
                     <FormGroup controlId="category" className="my-2">

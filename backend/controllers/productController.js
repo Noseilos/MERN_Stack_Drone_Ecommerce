@@ -205,5 +205,13 @@ const createBrand = asyncHandler(async (req, res) => {
     res.send(createdBrand);
 });
 
+// @desc    Fetch ALL categories
+// @route   GET /api/categories
+// @access  Public
+const getBrands = asyncHandler(async (req, res) => {
+    const brands = await Brand.find({});
+    res.status(200).json(brands);
+});
 
-export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory, getCategories, createBrand };
+
+export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory, getCategories, createBrand, getBrands };

@@ -106,13 +106,13 @@ export const productsApiSlice = apiSlice.injectEndpoints({
                 body: data,
             })
         }),
-        // getCategories: builder.query({
-        //     query: () => ({
-        //         url: CATEGORIES_URL,
-        //     }),
-        //     providesTags: ['Category'],
-        //     keepUnusedDataFor: 5,
-        // }),
+        getBrands: builder.query({
+            query: () => ({
+                url: BRANDS_URL,
+            }),
+            providesTags: ['Brand'],
+            keepUnusedDataFor: 5,
+        }),
     }),
 });
 
@@ -129,5 +129,6 @@ export const {
     useUploadCategoryImageMutation,
     useGetCategoriesQuery,
     useCreateBrandMutation,
-    useUploadBrandImageMutation
+    useUploadBrandImageMutation,
+    useGetBrandsQuery,
 } = productsApiSlice;

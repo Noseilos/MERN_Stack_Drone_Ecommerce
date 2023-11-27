@@ -10,6 +10,7 @@ import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import userUploadRoutes from './routes/userUploadRoutes.js'
 import categoryUploadRoutes from './routes/categoryUploadRoutes.js';
 import brandUploadRoutes from './routes/brandUploadRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
@@ -36,7 +37,7 @@ app.use('/api/brands', brandRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/uploads', uploadRoutes);
-app.use('/api/uploads/user', brandUploadRoutes);
+app.use('/api/uploads/user', userUploadRoutes);
 app.use('/api/uploads/category', categoryUploadRoutes);
 app.use('/api/uploads/brand', brandUploadRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

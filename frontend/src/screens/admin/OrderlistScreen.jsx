@@ -4,16 +4,20 @@ import { FaTimes } from 'react-icons/fa'
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 import { useGetOrdersQuery } from '../../slices/ordersSlice'
-import { Line, Bar } from 'react-chartjs-2'
+import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS } from "chart.js/auto";
 
 const OrderlistScreen = () => {
 
   const { data: orders, isLoading, error } = useGetOrdersQuery();
-  console.log(orders)
+  console.log(orders);
 
-  const dates = orders ? orders.map(order => order.createdAt.substring(0, 10)) : [];
-  const totalPrices = orders ? orders.map(order => order.totalPrice) : [];
+  if (orders == null) {
+    return <Loader />;
+  }
+
+  const dates = orders.map((order) => order.createdAt.substring(0, 10));
+  const totalPrices = orders.map((order) => order.totalPrice);
 
   const data = {
     labels: dates,
@@ -28,7 +32,9 @@ const OrderlistScreen = () => {
     ],
   };
 
-  const products = orders ? orders.flatMap(order => order.orderItems.map(item => item.name)) : [];
+  const products = orders.flatMap((order) =>
+    order.orderItems.map((item) => item.name)
+  );
   const productCounts = products.reduce((acc, product) => {
     acc[product] = (acc[product] || 0) + 1;
     return acc;
@@ -46,17 +52,30 @@ const OrderlistScreen = () => {
     ],
   };
 
-const options = {
-  scales: {
-    yAxes: [
+  const isPaidCount = orders.filter((order) => order.isPaid).length;
+  const isDeliveredCount = orders.filter((order) => order.isDelivered).length;
+
+  const pieData = {
+    labels: ['Paid', 'Not Paid', 'Delivered', 'Not Delivered'],
+    datasets: [
       {
-        ticks: {
-          beginAtZero: true,
-        },
+        data: [isPaidCount, orders.length - isPaidCount, isDeliveredCount, orders.length - isDeliveredCount],
+        backgroundColor: ['green', 'red', 'blue', 'orange'],
       },
     ],
-  },
-};
+  };
+
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  };
 
   return (
     <>
@@ -111,6 +130,7 @@ const options = {
         </Table>
         <Line data={data} />
         <Bar data={barData} />
+        <Doughnut data={pieData} />
         </>
       ) }
     </>

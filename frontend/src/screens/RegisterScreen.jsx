@@ -4,7 +4,7 @@ import { Form, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import Loader from '../components/Loader'
-import { useRegisterMutation } from '../slices/usersApiSlice'
+import { useRegisterMutation, useUploadUserImageMutation } from '../slices/usersApiSlice'
 import { setCredentials } from '../slices/authSlice'
 import { toast } from 'react-toastify'
 
@@ -12,6 +12,7 @@ const RegisterScreen = () => {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [image, setImage] = useState([]);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -19,6 +20,7 @@ const RegisterScreen = () => {
     const navigate = useNavigate();
 
     const [ register, {isLoading} ] = useRegisterMutation();
+    const [uploadUserImage, { isLoading: loadingUpload }] = useUploadUserImageMutation();
 
     const { userInfo } = useSelector((state) => state.auth)
     const { search } = useLocation();
@@ -31,6 +33,23 @@ const RegisterScreen = () => {
         } 
     }, [userInfo, redirect, navigate])
 
+    const uploadFileHandler = async (e) => {
+        const formData = new FormData();
+    
+        for (let i = 0; i < e.target.files.length; i++) {
+          formData.append('image', e.target.files[i]);
+        }
+    
+        try {
+          const res = await uploadUserImage(formData).unwrap();
+          toast.success(res.message);
+          setImage(res.image); 
+        } catch (err) {
+          toast.error(err?.data?.message || err.error);
+          console.log(err?.data?.message || err.error);
+        }
+      };
+
     const submitHandler = async (e) => {
         e.preventDefault();
 
@@ -39,7 +58,7 @@ const RegisterScreen = () => {
             return;
         } else {
             try {
-                const res = await register({ name, email, password }).unwrap();
+                const res = await register({ name, email, image, password }).unwrap();
                 dispatch(setCredentials({ ...res }));
                 navigate(redirect);
             } catch (err) {
@@ -74,6 +93,16 @@ const RegisterScreen = () => {
                     onChange={(e) => setEmail(e.target.value)}
                 >
                 </Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="image" className="my-2">
+                <Form.Label>Image</Form.Label>
+                <Form.Control
+                    type="file"
+                    label="Choose files"
+                    multiple
+                    onChange={uploadFileHandler}
+                ></Form.Control>
             </Form.Group>
             
             <Form.Group controlId='password' className='my-3'>

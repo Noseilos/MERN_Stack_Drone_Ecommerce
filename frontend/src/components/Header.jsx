@@ -68,6 +68,14 @@ const Header = () => {
                         </LinkContainer>
 
                         { userInfo ? (
+                        <>
+                            <figure className="avatar avatar-nav">
+                                <img
+                                    src={userInfo.image[0]}
+                                    alt={userInfo && userInfo.name}
+                                    className="rounded-circle"
+                                />
+                            </figure>
                             <NavDropdown title={ userInfo.name } id='username'>
                                 <LinkContainer to='/profile'>
                                     <NavDropdown.Item>
@@ -78,6 +86,7 @@ const Header = () => {
                                     Logout
                                 </NavDropdown.Item>
                             </NavDropdown>
+                        </>
                         ) : (
                             <LinkContainer to='/login'>
                                 <Nav.Link><FaUser />Log In</Nav.Link>

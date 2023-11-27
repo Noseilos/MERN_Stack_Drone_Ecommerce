@@ -9,6 +9,7 @@ import { useProfileMutation } from "../slices/usersApiSlice"
 import { setCredentials } from "../slices/authSlice"
 import { useGetMyOrdersQuery } from "../slices/ordersSlice"
 import { FaTimes } from 'react-icons/fa'
+import { Carousel, Image as BootstrapImage } from "react-bootstrap";
 
 const ProfileScreen = () => {
 
@@ -51,10 +52,28 @@ const ProfileScreen = () => {
         }
     }
 
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleSelect = (selectedIndex, e) => {
+    setActiveIndex(selectedIndex);
+  };
+
   return (
     <Row>
         <Col md={3}>
             <h2>User Profile</h2>
+
+            {userInfo.image && userInfo.image.length > 1 ? (
+                <Carousel activeIndex={activeIndex} onSelect={handleSelect}>
+                  {userInfo.image.map((image, index) => (
+                    <Carousel.Item key={index}>
+                      <BootstrapImage src={image} alt={`Image ${index + 1}`} fluid />
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              ) : (
+                <BootstrapImage src={userInfo.image} alt={userInfo.name} fluid />
+              )}
 
             <Form onSubmit={submitHandler}>
                 <Form.Group

@@ -1,5 +1,7 @@
 import asyncHandler from '../middleware/asyncHandler.js'
 import Order from '../models/orderModel.js';
+import User from '../models/userModel.js';
+import sendEmailWithReceipt from '../utils/sendEmail.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -67,21 +69,41 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @access  Private
 const updateOrderToPaid = asyncHandler(async (req, res) => { 
     const order = await Order.findById(req.params.id);
+    const message = `Order Processing!`
+    const user = await User.findById(req.user._id);
 
-    if (order) {
-        order.isPaid = true;
-        order.paidAt = Date.now();
-        order.paymentResult = {
-            id: req.body.id,
-            status: req.body.status,
-            update_time: req.body.update_time,
-            email_address: req.body.email_address,
-        };
+    try {
 
-        const updatedOrder = await order.save();
+        if (order) {
+            order.isPaid = true;
+            order.paidAt = Date.now();
+            order.paymentResult = {
+                id: req.body.id,
+                status: req.body.status,
+                update_time: req.body.update_time,
+                email_address: req.body.email_address,
+            };
+    
+            const updatedOrder = await order.save();
+    
+            res.status(200).json(updatedOrder);
+        } else {
+            res.status(404);
+            throw new Error('Order not found');
+        }
 
-        res.status(200).json(updatedOrder);
-    } else {
+        await sendEmailWithReceipt({
+            email: user.email,
+            subject: 'NTech Order Confirmation',
+            message
+        }, order)
+
+        res.status(200).json({
+            success: true,
+            message: `Email sent to: ${user.email}`
+        })
+
+    } catch (error) {
         res.status(404);
         throw new Error('Order not found');
     }
@@ -93,14 +115,34 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const updateOrderToDelivered = asyncHandler(async (req, res) => { 
     const order = await Order.findById(req.params.id);
+    const message = `Order Delivered!`
+    const user = await User.findById(req.user._id);
 
-    if (order) {
-        order.isDelivered = true;
-        order.deliveredAt = Date.now()
+    try {
+        
+        if (order) {
+            order.isDelivered = true;
+            order.deliveredAt = Date.now()
 
-        const updatedOrder = await order.save();
-        res.status(200).json(updatedOrder);
-    } else {
+            const updatedOrder = await order.save();
+            res.status(200).json(updatedOrder);
+        } else {
+            res.status(404);
+            throw new Error('Order not found');
+        }
+
+        await sendEmail({
+            email: user.email,
+            subject: 'NTech Order Status',
+            message
+        })
+
+        res.status(200).json({
+            success: true,
+            message: `Email sent to: ${user.email}`
+        })
+
+    } catch (error) {
         res.status(404);
         throw new Error('Order not found');
     }

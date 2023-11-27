@@ -15,7 +15,7 @@ const PlaceOrderScreen = () => {
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.cart);
 
-    const [createOrder, {isLoading, error}] = useCreateOrderMutation();
+    const [createOrder, {isLoading, error: errorCreate}] = useCreateOrderMutation();
 
     useEffect(() => {
         if (!cart.shippingAddress.address) {
@@ -40,7 +40,7 @@ const PlaceOrderScreen = () => {
             dispatch(clearCartItems());
             navigate(`/order/${res._id}`);
         } catch (error) {
-            toast.error(error)
+            toast.error(error.message)
         }
     }
 
@@ -74,7 +74,7 @@ const PlaceOrderScreen = () => {
                                     <ListGroup.Item key={index}>
                                         <Row>
                                             <Col md={1}>
-                                                <Image src={item.image} alt={item.name} fluid rounded />
+                                                <Image src={item.image[0]} alt={item.name} fluid rounded />
                                             </Col>
                                             <Col>
                                                 <Link to={`/product/${item._id}`}>{item.name}</Link>
@@ -126,7 +126,13 @@ const PlaceOrderScreen = () => {
                         </ListGroup.Item>
 
                         <ListGroup.Item>
-                            { error && <Message variant='danger'>{error}</Message> }
+                        {errorCreate && (
+                            <Message variant='danger'>
+                                {typeof errorCreate.data === 'object'
+                                ? JSON.stringify(errorCreate.data)
+                                : errorCreate.data || 'An error occurred'}
+                            </Message>
+                        )}
                         </ListGroup.Item>
 
                         <ListGroup.Item>

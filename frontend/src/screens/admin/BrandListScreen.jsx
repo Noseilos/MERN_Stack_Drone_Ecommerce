@@ -4,23 +4,23 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useGetCategoriesQuery, useDeleteCategoryMutation } from '../../slices/productsApiSlice';
+import { useGetBrandsQuery, useDeleteBrandMutation } from '../../slices/productsApiSlice';
 import { toast } from 'react-toastify';
 import Paginate from '../../components/Paginate';
 
-const CategoryListScreen = () => {
+const BrandListScreen = () => {
   
     const { pageNumber } = useParams();
 
-    const { data, isLoading, error, refetch } = useGetCategoriesQuery({ pageNumber });
+    const { data, isLoading, error, refetch } = useGetBrandsQuery({ pageNumber });
 
-    const [deleteCategory, { isLoading: loadingDelete }] = useDeleteCategoryMutation();
+    const [deleteBrand, { isLoading: loadingDelete }] = useDeleteBrandMutation();
     
     const deleteHandler = async (id) => {
         if (window.confirm('Delete item?')) {
             try {
-                await deleteCategory(id);
-                toast.success('Category Deleted');
+                await deleteBrand(id);
+                toast.success('Brand Deleted');
                 refetch();
             } catch (err) {
                 toast.error(err?.data?.message || err.error);
@@ -34,12 +34,12 @@ const CategoryListScreen = () => {
     <>
         <Row className='align-items-center'>
             <Col>
-                <h1>Categories</h1>
+                <h1>Brands</h1>
             </Col>
             <Col className='text-end'>
-                <LinkContainer to={`/admin/category/create`}>
+                <LinkContainer to={`/admin/brand/create`}>
                     <Button className='btn-sm m-3'>
-                        <FaEdit /> Create category
+                        <FaEdit /> Create brand
                     </Button>
                 </LinkContainer>
             </Col>
@@ -57,18 +57,18 @@ const CategoryListScreen = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        { data.map((cat) => (
-                            <tr key={cat._id}>
-                                <td>{cat._id}</td>
-                                <td>{cat.name}</td>
+                        { data.map((brand) => (
+                            <tr key={brand._id}>
+                                <td>{brand._id}</td>
+                                <td>{brand.name}</td>
                                 <td>
-                                    <LinkContainer to={`/admin/category/edit/${cat._id}`}>
+                                    <LinkContainer to={`/admin/brand/edit/${brand._id}`}>
                                         <Button variant='light' className='btn-sm mx-2'>
                                             <FaEdit />
                                         </Button>
                                     </LinkContainer>
 
-                                    <Button variant='danger' className='btn-sm' style={{ color: 'white' }} onClick={ () => deleteHandler(cat._id) }>
+                                    <Button variant='danger' className='btn-sm' style={{ color: 'white' }} onClick={ () => deleteHandler(brand._id) }>
                                         <FaTrash />
                                     </Button>
                                 </td>
@@ -83,4 +83,4 @@ const CategoryListScreen = () => {
   )
 }
 
-export default CategoryListScreen
+export default BrandListScreen

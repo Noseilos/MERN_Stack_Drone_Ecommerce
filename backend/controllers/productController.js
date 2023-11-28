@@ -262,5 +262,54 @@ const getBrands = asyncHandler(async (req, res) => {
     res.status(200).json(brands);
 });
 
+// @desc    Fetch a brand
+// @route   GET /api/brands/:id
+// @access  Private/Admin
+const getBrandById = asyncHandler(async (req, res) => {
+    const brand = await Brand.findById(req.params.id);
 
-export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory, getCategories, updateCategory, createBrand, getBrands, getCategoryById, deleteCategory };
+    if (brand) {
+        return res.json(brand);
+    } else {
+        res.status(404);
+        throw new Error('Resource not found');
+    }
+});
+
+// @desc    Update a brand
+// @route   PUT /api/brands/:id
+// @access  Private/Admin
+const updateBrand = asyncHandler(async (req, res) => {
+    const { name, image } = req.body;
+
+    const brand = await Brand.findById(req.params.id);
+
+    if (brand) {
+        brand.name = name,
+        brand.image = image
+
+        const updatedBrand = await brand.save();
+        res.json(updatedBrand);
+    } else {
+        res.status(404);
+        throw new Error('Resource not found');
+    }
+});
+
+// @desc    Delete a brand
+// @route   DELETE /api/categories/:id
+// @access  Private/Admin
+const deleteBrand = asyncHandler(async (req, res) => {
+    const brand = await Brand.findById(req.params.id);
+
+    if (brand) {
+        await Brand.deleteOne({ _id: brand._id })
+        res.status(200).json({ message: 'Brand deleted' });
+    } else {
+        res.status(404);
+        throw new Error('Resource not found');
+    }
+});
+
+
+export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory, getCategories, updateCategory, getCategoryById, deleteCategory, createBrand, getBrands, getBrandById, updateBrand, deleteBrand };

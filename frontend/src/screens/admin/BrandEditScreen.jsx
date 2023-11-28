@@ -4,13 +4,13 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useUpdateCategoryMutation, useUploadCategoryImageMutation, useGetCategoryDetailsQuery } from '../../slices/productsApiSlice';
+import { useUpdateBrandMutation, useUploadBrandImageMutation, useGetBrandDetailsQuery } from '../../slices/productsApiSlice';
 import { toast } from 'react-toastify';
 import { Form ,Button, FormGroup, FormControl } from 'react-bootstrap';
 import FormContainer from "../../components/FormContainer";
 
-const CategoryEditScreen = () => {
-    const { id: categoryId } = useParams();
+const BrandEditScreen = () => {
+    const { id: brandId } = useParams();
   
     const [name, setName] = useState('');
     const [image, setImage] = useState([]);
@@ -18,39 +18,39 @@ const CategoryEditScreen = () => {
     const navigate = useNavigate();
 
     const {
-        data: category,
+        data: brand,
         isLoading,
         error,
         refetch,
-      } = useGetCategoryDetailsQuery(categoryId);
+      } = useGetBrandDetailsQuery(brandId);
 
-    const [uploadCategoryImage, { isLoading: loadingUpload }] = useUploadCategoryImageMutation();
-    const [updateCategory, { isLoading: loadingUpdate}] = useUpdateCategoryMutation();
+    const [uploadBrandImage, { isLoading: loadingUpload }] = useUploadBrandImageMutation();
+    const [updateBrand, { isLoading: loadingUpdate}] = useUpdateBrandMutation();
 
     useEffect(() => {
-      if (category) {
-        setName(category.name);
-        setImage(category.image);
+      if (brand) {
+        setName(brand.name);
+        setImage(brand.image);
       }
-    }, [category]);
+    }, [brand]);
 
-    console.log(category)
+    console.log(brand)
   
     const submitHandler = async (e) => {
       e.preventDefault();
-      const updatedCategory = {
-        categoryId,
+      const updatedBrand = {
+        brandId,
         name,
         image,
       };
   
-      const result = await updateCategory(updatedCategory);
+      const result = await updateBrand(updatedBrand);
   
       if (result.error) {
         toast.error(result.error)
       } else {
-        toast.success('Category Updated');
-        navigate('/admin/categories');
+        toast.success('Brand Updated');
+        navigate('/admin/brands');
       }
     }
   
@@ -62,7 +62,7 @@ const CategoryEditScreen = () => {
         }
     
         try {
-          const res = await uploadCategoryImage(formData).unwrap();
+          const res = await uploadBrandImage(formData).unwrap();
           toast.success(res.message);
           setImage(res.image); 
         } catch (err) {
@@ -72,12 +72,12 @@ const CategoryEditScreen = () => {
       };
 
   return <>
-    <Link to={`/admin/categories`} className="btn btn-light my-3">
+    <Link to={`/admin/brands`} className="btn btn-light my-3">
       Go Back
     </Link>
 
     <FormContainer>
-      <h1>Edit Category</h1>
+      <h1>Edit Brand</h1>
       { loadingUpdate && <Loader /> }
 
       { isLoading ? <Loader /> : error ? (
@@ -89,7 +89,7 @@ const CategoryEditScreen = () => {
         <Form onSubmit={ submitHandler }>
           
           <Form.Group controlId="name" className="my-2">
-              <Form.Label>Category</Form.Label>
+              <Form.Label>Brand</Form.Label>
               <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} />
             </Form.Group>
 
@@ -113,4 +113,4 @@ const CategoryEditScreen = () => {
   </>;
 }
 
-export default CategoryEditScreen
+export default BrandEditScreen

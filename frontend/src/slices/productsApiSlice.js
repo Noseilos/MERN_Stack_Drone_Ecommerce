@@ -133,6 +133,26 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             providesTags: ['Brand'],
             keepUnusedDataFor: 5,
         }),
+        getBrandDetails: builder.query({
+            query: (brandId) => ({
+                url: `${BRANDS_URL}/${brandId}`,
+            }),
+            keepUnusedDataFor: 5,
+        }),
+        updateBrand: builder.mutation({
+            query: (data) => ({
+                url: `${BRANDS_URL}/${data.brandId}`,
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['Category'],
+        }),
+        deleteBrand: builder.mutation({
+            query: (brandId) => ({
+                url: `${BRANDS_URL}/${brandId}`,
+                method: 'DELETE',
+            })
+        }),
     }),
 });
 
@@ -154,4 +174,7 @@ export const {
     useCreateBrandMutation,
     useUploadBrandImageMutation,
     useGetBrandsQuery,
+    useGetBrandDetailsQuery,
+    useUpdateBrandMutation,
+    useDeleteBrandMutation,
 } = productsApiSlice;

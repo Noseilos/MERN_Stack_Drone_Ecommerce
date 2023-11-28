@@ -36,9 +36,11 @@ import UserListScreen from './screens/admin/UserListScreen';
 import UserEditScreen from './screens/admin/UserEditScreen';
 import ProductCreateScreen from './screens/admin/ProductCreateScreen';
 import CategoryCreateScreen from './screens/admin/CategoryCreateScreen';
-import BrandCreateScreen from './screens/admin/BrandCreateScreen';
 import CategoryListScreen from './screens/admin/CategoryListScreen';
 import CategoryEditScreen from './screens/admin/CategoryEditScreen';
+import BrandCreateScreen from './screens/admin/BrandCreateScreen';
+import BrandListScreen from './screens/admin/BrandListScreen';
+import BrandEditScreen from './screens/admin/BrandEditScreen';
 
 // --- COMPONENT IMPORTS
 import PrivateRoute from './components/PrivateRoute';
@@ -73,7 +75,9 @@ const router = createBrowserRouter(
         <Route path='/admin/category/create' element={ <CategoryCreateScreen /> }/>
         <Route path='/admin/categories' element={ <CategoryListScreen /> }/>
         <Route path='/admin/category/edit/:id' element={ <CategoryEditScreen /> }/>
-        <Route path='/admin/brands' element={ <BrandCreateScreen /> }/>
+        <Route path='/admin/brand/create' element={ <BrandCreateScreen /> }/>
+        <Route path='/admin/brand/edit/:id' element={ <BrandEditScreen /> }/>
+        <Route path='/admin/brands' element={ <BrandListScreen /> }/>
         <Route path='/admin/orders' element={ <OrderlistScreen /> }/>
         <Route path='/admin/users' element={ <UserListScreen /> }/>
         <Route path='/admin/user/edit/:id' element={ <UserEditScreen /> }/>

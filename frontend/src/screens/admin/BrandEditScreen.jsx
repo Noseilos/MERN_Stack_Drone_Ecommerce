@@ -8,6 +8,7 @@ import { useUpdateBrandMutation, useUploadBrandImageMutation, useGetBrandDetails
 import { toast } from 'react-toastify';
 import { Form ,Button, FormGroup, FormControl } from 'react-bootstrap';
 import FormContainer from "../../components/FormContainer";
+import { Carousel, Image as BootstrapImage } from "react-bootstrap";
 
 const BrandEditScreen = () => {
     const { id: brandId } = useParams();
@@ -71,6 +72,12 @@ const BrandEditScreen = () => {
         }
       };
 
+      const [activeIndex, setActiveIndex] = useState(0);
+    
+      const handleSelect = (selectedIndex, e) => {
+        setActiveIndex(selectedIndex);
+      };
+
   return <>
     <Link to={`/admin/brands`} className="btn btn-light my-3">
       Go Back
@@ -103,6 +110,18 @@ const BrandEditScreen = () => {
               ></Form.Control>
           </Form.Group>
           { loadingUpload && <Loader /> }
+
+            {brand.image && brand.image.length > 1 ? (
+                <Carousel activeIndex={activeIndex} onSelect={handleSelect}>
+                {brand.image.map((image, index) => (
+                    <Carousel.Item key={index}>
+                    <BootstrapImage src={image} alt={`Image ${index + 1}`} fluid />
+                    </Carousel.Item>
+                ))}
+                </Carousel>
+            ) : (
+                <BootstrapImage src={brand.image} alt={brand.name} fluid />
+            )}
 
           <Button type="submit" variant="primary" className="my-2">
             Update

@@ -8,6 +8,7 @@ import { useUpdateCategoryMutation, useUploadCategoryImageMutation, useGetCatego
 import { toast } from 'react-toastify';
 import { Form ,Button, FormGroup, FormControl } from 'react-bootstrap';
 import FormContainer from "../../components/FormContainer";
+import { Carousel, Image as BootstrapImage } from "react-bootstrap";
 
 const CategoryEditScreen = () => {
     const { id: categoryId } = useParams();
@@ -71,6 +72,12 @@ const CategoryEditScreen = () => {
         }
       };
 
+      const [activeIndex, setActiveIndex] = useState(0);
+    
+      const handleSelect = (selectedIndex, e) => {
+        setActiveIndex(selectedIndex);
+      };
+
   return <>
     <Link to={`/admin/categories`} className="btn btn-light my-3">
       Go Back
@@ -103,6 +110,18 @@ const CategoryEditScreen = () => {
               ></Form.Control>
           </Form.Group>
           { loadingUpload && <Loader /> }
+
+          {category.image && category.image.length > 1 ? (
+              <Carousel activeIndex={activeIndex} onSelect={handleSelect}>
+                {category.image.map((image, index) => (
+                  <Carousel.Item key={index}>
+                    <BootstrapImage src={image} alt={`Image ${index + 1}`} fluid />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+            ) : (
+              <BootstrapImage src={category.image} alt={category.name} fluid />
+            )}
 
           <Button type="submit" variant="primary" className="my-2">
             Update

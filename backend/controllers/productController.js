@@ -175,6 +175,55 @@ const createCategory = asyncHandler(async (req, res) => {
     res.send(createdCategory);
 });
 
+// @desc    Fetch a category
+// @route   GET /api/categories/:id
+// @access  Private/Admin
+const getCategoryById = asyncHandler(async (req, res) => {
+    const category = await Category.findById(req.params.id);
+
+    if (category) {
+        return res.json(category);
+    } else {
+        res.status(404);
+        throw new Error('Resource not found');
+    }
+});
+
+// @desc    Update a category
+// @route   PUT /api/categories/:id
+// @access  Private/Admin
+const updateCategory = asyncHandler(async (req, res) => {
+    const { name, image } = req.body;
+
+    const category = await Category.findById(req.params.id);
+
+    if (category) {
+        category.name = name,
+        category.image = image
+
+        const updatedCategory = await category.save();
+        res.json(updatedCategory);
+    } else {
+        res.status(404);
+        throw new Error('Resource not found');
+    }
+});
+
+// @desc    Delete a category
+// @route   DELETE /api/categories/:id
+// @access  Private/Admin
+const deleteCategory = asyncHandler(async (req, res) => {
+    const category = await Category.findById(req.params.id);
+
+    if (category) {
+        await Category.deleteOne({ _id: category._id })
+        res.status(200).json({ message: 'Category deleted' });
+    } else {
+        res.status(404);
+        throw new Error('Resource not found');
+    }
+});
+
 // @desc    Fetch ALL categories
 // @route   GET /api/categories
 // @access  Public
@@ -214,4 +263,4 @@ const getBrands = asyncHandler(async (req, res) => {
 });
 
 
-export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory, getCategories, createBrand, getBrands };
+export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview, getTopProducts, createCategory, getCategories, updateCategory, createBrand, getBrands, getCategoryById, deleteCategory };

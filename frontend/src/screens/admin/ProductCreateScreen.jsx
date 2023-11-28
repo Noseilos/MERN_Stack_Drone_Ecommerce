@@ -124,7 +124,7 @@ const ProductCreateScreen = () => {
                             onChange={(e) => setBrand(e.target.value)}
                           >
                             <option value="">Select Brand...</option>
-                            {loadingCategories ? (
+                            {loadingBrands ? (
                                 <option>Loading brands...</option>
                             ) : (
                                 brands.map((brandItem) => (

@@ -88,6 +88,26 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             providesTags: ['Category'],
             keepUnusedDataFor: 5,
         }),
+        getCategoryDetails: builder.query({
+            query: (catId) => ({
+                url: `${CATEGORIES_URL}/${catId}`,
+            }),
+            keepUnusedDataFor: 5,
+        }),
+        updateCategory: builder.mutation({
+            query: (data) => ({
+                url: `${CATEGORIES_URL}/${data.categoryId}`,
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['Category'],
+        }),
+        deleteCategory: builder.mutation({
+            query: (categoryId) => ({
+                url: `${CATEGORIES_URL}/${categoryId}`,
+                method: 'DELETE',
+            })
+        }),
 
         // -------------------- BRAND SLICES --------------------
 
@@ -126,6 +146,9 @@ export const {
     useCreateReviewMutation,
     useGetTopProductsQuery,
     useCreateCategoriesMutation,
+    useGetCategoryDetailsQuery,
+    useUpdateCategoryMutation,
+    useDeleteCategoryMutation,
     useUploadCategoryImageMutation,
     useGetCategoriesQuery,
     useCreateBrandMutation,

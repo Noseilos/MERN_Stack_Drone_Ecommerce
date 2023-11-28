@@ -6,7 +6,9 @@ import Loader from "../../components/Loader";
 import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
-  useUploadProductImageMutation
+  useUploadProductImageMutation,
+  useGetBrandsQuery,
+  useGetCategoriesQuery
 } from "../../slices/productsApiSlice";
 import FormContainer from "../../components/FormContainer";
 import { toast } from 'react-toastify';
@@ -22,6 +24,10 @@ const ProductEditScreen = () => {
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
 
+  
+  const { data: brands, isLoading: loadingBrands } = useGetBrandsQuery();
+  const { data: categories, isLoading: loadingCategories } = useGetCategoriesQuery();
+
   const {
     data: product,
     isLoading,
@@ -31,7 +37,7 @@ const ProductEditScreen = () => {
 
   const [updateProduct, {isLoading: loadingUpdate}] = useUpdateProductMutation();
 
-  const [uploadImage, {isLoading: loadingUpload}] = useUploadProductImageMutation();
+  const [uploadProductImage, {isLoading: loadingUpload}] = useUploadProductImageMutation();
 
   const navigate = useNavigate();
 
@@ -71,17 +77,21 @@ const ProductEditScreen = () => {
   }
 
   const uploadFileHandler = async (e) => {
-    const formData = new FormData();
-    formData.append('image' , e.target.files[0]);
-
-    try {
-      const res = await uploadImage(formData).unwrap();
-      toast.success(res.message);
-      setImage(res.image);
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
-    }
-  }
+      const formData = new FormData();
+  
+      for (let i = 0; i < e.target.files.length; i++) {
+        formData.append('image', e.target.files[i]);
+      }
+  
+      try {
+        const res = await uploadProductImage(formData).unwrap();
+        toast.success(res.message);
+        setImage(res.image); 
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+        console.log(err?.data?.message || err.error);
+      }
+    };
 
   return <>
     <Link to={`/admin/products`} className="btn btn-light my-3">
@@ -108,25 +118,45 @@ const ProductEditScreen = () => {
               onChange={(e) => setName(e.target.value)}
             ></Form.Control>
           </Form.Group>
-          
-          <Form.Group controlId="brand" className="my-3">
-            <Form.Label>Brand</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter Brand"
-              value={brand}
-              onChange={(e) => setBrand(e.target.value)}
-            ></Form.Control>
+                    
+          <Form.Group controlId="brand" className="my-2">
+              <Form.Label>Brand</Form.Label>
+              <Form.Control
+                  as="select"
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                >
+                  <option value="">Select Brand...</option>
+                  {loadingBrands ? (
+                      <option>Loading brands...</option>
+                  ) : (
+                      brands.map((brandItem) => (
+                          <option key={brandItem._id} value={brandItem.name}>
+                          {brandItem.name}
+                          </option>
+                      ))
+                  )}
+                </Form.Control>
           </Form.Group>
           
-          <Form.Group controlId="category" className="my-3">
-            <Form.Label>Category</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter Category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            ></Form.Control>
+          <Form.Group controlId="category" className="my-2">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                  as="select"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  <option value="">Select Category...</option>
+                  {loadingCategories ? (
+                      <option>Loading categories...</option>
+                  ) : (
+                      categories.map((categoryItem) => (
+                          <option key={categoryItem._id} value={categoryItem.name}>
+                          {categoryItem.name}
+                          </option>
+                      ))
+                  )}
+                </Form.Control>
           </Form.Group>
           
           <Form.Group controlId="price" className="my-3">
@@ -140,13 +170,15 @@ const ProductEditScreen = () => {
           </Form.Group>
 
           <Form.Group controlId="image" className="my-2">
-            <Form.Label>Image</Form.Label>
-            <Form.Control
-              type="file"
-              label="Choose file"
-              onChange={ uploadFileHandler }
-            ></Form.Control>
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                  type="file"
+                  label="Choose files"
+                  multiple
+                  onChange={uploadFileHandler}
+              ></Form.Control>
           </Form.Group>
+          { loadingUpload && <Loader /> }
           
           <Form.Group controlId="countInStock" className="my-3">
             <Form.Label>Count In Stock</Form.Label>
